@@ -1,7 +1,45 @@
+
+
+def _binary_search(value, collection, start_index, end_index):
+    if start_index > end_index:
+        return -1 # not found
+    middle_index = start_index + ( (end_index - start_index) // 2 )
+    if value == collection[middle_index]:
+        return middle_index
+    if value < collection[middle_index]:
+        return _binary_search(value, collection, start_index, middle_index-1)
+    return _binary_search(value, collection, middle_index+1, end_index)
+
+def binary_search(value, collection):
+    return _binary_search(value, collection, 0, len(collection)-1)
+
+numbers = list(range(10))
+
+for number in range(10):
+    print(binary_search(number, numbers))
+
+
+
+
+
+
+#bing maxium recursion depth in python
+import sys
+
+
+print("Current Recursion Limit:", sys.getrecursionlimit())
+
 def count_down(number):
     print(number)
     if number > 0:
         count_down(number-1)
+
+def bad_count_down(number):
+    print(number)
+    if number != 0:
+        bad_count_down(number - 1)
+
+# bad_count_down(-1)
 
 def bad_fib(nth):
     if nth <= 2:
