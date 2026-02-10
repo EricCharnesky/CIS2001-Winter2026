@@ -239,3 +239,11 @@ print(deque.remove_back())
 
 while not deque.is_empty():
     print(deque.remove_back())
+
+
+my_list = CircularDoublyLinkedList()
+for number in range(10):
+    my_list.add_to_back(number)
+
+while not my_list.is_empty():
+    print(my_list.remove_back())
