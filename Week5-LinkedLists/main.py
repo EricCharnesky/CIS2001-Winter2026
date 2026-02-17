@@ -145,12 +145,49 @@ class CircularDoublyLinkedList:
         item = node.item
         node.next.previous = node.previous
         node.previous.next = node.next
+        node.next = None # marks as invalid node in case a position is still referencing it
+        node.previous = None
         self._number_of_items -= 1
         return item
 
     def _check_empty(self):
         if self.is_empty():
             raise ValueError("Empty")
+
+    def _make_position(self, node):
+        if node is self._dummy_node:
+            return None
+        return self.Position(self, node)
+
+    # O(1)
+    def first(self):
+        return self._make_position(self._dummy_node.next)
+
+    # O(1)
+    def last(self):
+        return self._make_position(self._dummy_node.next)
+
+    # O(1)
+    def before(self, position):
+        node = self._validate(position)
+        return self._make_position(node.previous)
+
+    # O(1)
+    def after(self, position):
+        node = self._validate(position)
+        return self._make_position(node.next)
+
+    # O(1)
+    def insert_before(self, position, item):
+        node = self._validate(position)
+        self._add_between(item, node, node.previous)
+        return self._make_position(node.previous)
+
+    # O(1)
+    def insert_after(self, position, item):
+        node = self._validate(position)
+        self._add_between(item, node.next, node)
+        return self._make_position(node.next)
 
     # O(1)
     def remove_back(self):
@@ -216,6 +253,31 @@ class CircularDoublyLinkedList:
             self.item = item
             self.next = next
             self.previous = previous
+
+
+    class Position:
+
+        def __init__(self, container, node):
+            self._container = container
+            self._node = node
+
+        def __eq__(self, other):
+            return self._container is other._container and self._node is other._node
+
+        def __ne__(self, other):
+            return not ( self == other )
+
+        def item(self):
+            return self._node.item
+
+    def _validate(self, position):
+        if position._container is not self:
+            raise ValueError("invalid position")
+        if position._node.next is None:
+            raise ValueError("invalid position")
+        return position._node
+
+
 
 
 # stack = LinkedListStack()
